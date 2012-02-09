@@ -15,6 +15,7 @@ $steps = $votes;
 
 # for text output
 $votepercent = round($votes * (100/$users));
+$votepercent = $votepercent . "%";
 
 # create a new image, define colors and fonts to be used in it
 $img = imagecreatetruecolor(100,50);
