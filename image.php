@@ -39,10 +39,10 @@ if ($steps > 0) {
 # add text output, in a different color if number of colored layers was 0
 if ($steps > 0) {
     imagettftext($img, 20, 0, 38, 35, $white, $font, "$letter");
-    imagettftext($img, 12, 0, 05, 45, $white, $font, "$votepercent");
+    imagettftext($img, 10, 0, 05, 45, $white, $font, "$votepercent");
 } else {
     imagettftext($img, 20, 0, 38, 35, $gray, $font, "$letter");
-    imagettftext($img, 12, 0, 05, 45, $gray, $font, "$votepercent");
+    imagettftext($img, 10, 0, 05, 45, $gray, $font, "$votepercent");
 }
 
 # send HTTP header, the image, and clean up after ourselves
