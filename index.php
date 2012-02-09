@@ -123,6 +123,7 @@ $webkit= strpos($_SERVER['HTTP_USER_AGENT'],"AppleWebKit");
                 <input type="submit" value="Absenden!" />
             </form>
             <?php } ?>
+            Ihr könnt beliebig oft eure Auswahl verändern und wieder auf "absenden" klicken, eure neue Auswahl überschreibt dann eure vorherige.
         </div>
     </body>
 </html> 
