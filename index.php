@@ -1,4 +1,7 @@
 <?php
+# global toggle to disable voting
+$voting = true;
+
 # send proper HTTP Content-Type header
 header('Content-Type: text/html; charset=utf-8');
 
@@ -50,7 +53,7 @@ if (isset($name) && isset($k)) {
 }
 
 # someone voted!
-if (isset($id) && isset($vote)) {
+if ($voting && isset($id) && isset($vote)) {
     $votes = array();
     for ($i = 1; $i <= 7; $i++) {
         if (isset($_POST[$i]) && ($_POST[$i] >= 0) && ($_POST[$i] <=2 )) {
@@ -120,9 +123,13 @@ $webkit= strpos($_SERVER['HTTP_USER_AGENT'],"AppleWebKit");
                 <td><input type="text" name="<?php print($row['id']) ?>" pattern="[012]" required="required" placeholder="1" /></td></tr>
                 <?php }} ?>
                 </table>
-                <input type="submit" value="Absenden!" />
+                <input type="submit" value="Absenden!" <?php if (!$voting) print('disabled="disabled"'); ?>/>
             </form>
+                <?php if ($voting) { ?>
             Ihr könnt beliebig oft eure Auswahl verändern und wieder auf "absenden" klicken, eure neue Auswahl überschreibt dann eure vorherige.
+                <?php } else { ?>
+            Die Abstimmung wurde deaktiviert.
+                <?php } ?>
             <?php } ?>
         </div>
     </body>
