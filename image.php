@@ -1,27 +1,30 @@
 <?php
 # evaluate GET parameters
-if (isset($_GET['m']) && isset($_GET['v']) && isset($_GET['d'])) {
-    $users      = $_GET['m'];
-    $votes      = $_GET['v'];
-    $letter     = substr($_GET['d'],0,1);
+if (isset($_GET['votes']) && isset($_GET['max']) && isset($_GET['low']) && isset($_GET['high']) && isset($_GET['day'])) {
+    $votes      = $_GET['votes'];
+    $max        = $_GET['max'];
+    $low        = $_GET['low'];
+    $high       = $_GET['high'];
+    $letter     = substr($_GET['day'],0,1);
 }
-if (empty($users)) die();
+if (empty($max)) die();
 
-# how big are the steps to cover the 0-127 alpha range
-$alphastep = 127-(127/$users);
+# how big a step in the 0-127 alpha range will be used to represent one vote?
+# only take the range from lowest vote to highest vote into account for greater visual effect
+$alphastep = 127-127/($high-$low);
 
-# number of votes = number of steps used
-$steps = $votes;
+# number of votes (see above) = number of steps used
+$steps = $votes-$low;
 
-# for text output
-$votepercent = round($votes * (100/$users));
+# for text output, base percentages on the actual maximum number of votes
+$votepercent = round($votes * (100/$max));
 $votepercent = $votepercent . "%";
 
 # create a new image, define colors and fonts to be used in it
 $img = imagecreatetruecolor(100,50);
 $green = imagecolorallocatealpha($img,0,200,0,$alphastep);
 $white = imagecolorallocate($img,255,255,255);
-$gray = imagecolorallocate($img,245,245,245);
+$gray = imagecolorallocate($img,230,230,230);
 $font = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf';
 
 # enable alpha blending and fill with white background

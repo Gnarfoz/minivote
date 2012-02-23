@@ -98,14 +98,20 @@ $webkit= strpos($_SERVER['HTTP_USER_AGENT'],"AppleWebKit");
             <?php
 
             # get the maximum number of votes possible (users' votes can range from 0 to 2, so the maximum is 2 * number of users)
-            $rows = $dbh->query('SELECT count(id) AS num_users FROM users');
+            $rows = $dbh->query('SELECT COUNT(id) AS num_users FROM users');
             $row = $rows->fetch();
-            $num_users = 2*$row['num_users'];
+            $numvotes = 2*$row['num_users'];
+
+            # get the number of votes for the days with the lowest votes and highest votes, respectively
+            $rows = $dbh->query('SELECT MIN(votes) AS minvote, MAX(votes) AS maxvote FROM (SELECT SUM(vote) AS votes FROM votes GROUP BY day) AS sums');
+            $row = $rows->fetch();
+            $maxvote = $row['maxvote'];
+            $minvote = $row['minvote'];
 
             # for each day (by id) get the sum of the votes and then get the votes per day (by name) from that
-            # call the image create script for each one, passing in: number of votes, maximum number of votes, name of the day
-            foreach($dbh->query("SELECT a.day AS dayname, b.vote FROM days a JOIN (SELECT day, sum(vote) AS vote FROM votes GROUP BY day) b ON b.day=a.id") as $row) { ?>
-            <img alt="<?php print($row['dayname']) ?>" title="<?php print($row['dayname']) ?>" src="image.php?v=<?php print($row['vote']) ?>&m=<?php print($num_users) ?>&d=<?php print($row['dayname']) ?>" />
+            # call the image create script for each one, passing: actual number of votes, maximum number of votes, lowest vote, highest vote, name of the day
+            foreach($dbh->query("SELECT a.day AS dayname, b.vote FROM days a JOIN (SELECT day, SUM(vote) AS vote FROM votes GROUP BY day) b ON b.day=a.id") as $row) { ?>
+            <img alt="<?php print($row['dayname']) ?>" title="<?php print($row['dayname']) ?>" src="image.php?votes=<?php print($row['vote']) ?>&max=<?php print($numvotes) ?>&low=<?php print($minvote) ?>&high=<?php print($maxvote) ?>&day=<?php print($row['dayname']) ?>" />
             <?php } ?>
 
             </div>
